@@ -21,9 +21,7 @@ from agents.EvoDS import EvoDS
 random.seed(42)
 
 
-# 异步的处理函数
 async def process_data_item(dataset, data_item, agent, semaphore):
-    # 使用信号量来限制并发任务数
     async with semaphore:
         if dataset == 'DACode':
             await da_code(data_item, agent, args.model)
@@ -46,6 +44,7 @@ async def process_data_item(dataset, data_item, agent, semaphore):
         else:
             raise ValueError(f"Unknown dataset {dataset}")
 
+
 def clean_created_tools():
     for domain in ['data_clean', 'feature_engineering', 'modeling', 'visualization']:
         with open(f"utils/{args.dataset}/created_tools/{domain}_tools.json", "w", encoding='utf-8') as f:
@@ -53,10 +52,10 @@ def clean_created_tools():
         with open(f"utils/{args.dataset}/created_tools/{domain}_tool_count.json", "w", encoding='utf-8') as f:
             json.dump({}, f, indent=4, ensure_ascii=False)
 
-# 异步的主函数，批量执行数据项
+
 async def process_data(max_concurrent_tasks):
     tasks = []
-    semaphore = asyncio.Semaphore(max_concurrent_tasks)  # 控制并发数量
+    semaphore = asyncio.Semaphore(max_concurrent_tasks)
     data = await load_data(args.dataset)
 
     if args.clean_tools:
@@ -84,7 +83,7 @@ def parse_args():
     parser.add_argument(
         "--model",
         type=str,
-        default='deepseek-ai/DeepSeek-V3.1-Terminus',
+        default='evods-rl-8b',
         help="Specifies the name of the model used for EvoDS.",
     )
     parser.add_argument(
