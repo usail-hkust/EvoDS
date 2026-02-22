@@ -1,0 +1,202 @@
+tools:
+  - class_name: "verl.tools.data_cleaning_tools.FillMissingValuesTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "fill_missing_values"
+        description: "Fill missing values in specified columns of a dataset using the chosen method. The cleaned dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "The columns (or a single column) to fill missing values for."
+              items:
+                type: "string"
+            method:
+              type: "string"
+              description: "The method for filling missing values. Options: 'auto', 'mean', 'median', 'mode', 'constant'. Defaults to 'auto'."
+            fill_value:
+              type: "any"
+              description: "The value to use when the method is 'constant'. Defaults to None."
+          required: ["dataset_path", "columns"]
+
+  - class_name: "verl.tools.data_cleaning_tools.RemoveColumnsWithMissingDataTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "remove_columns_with_missing_data"
+        description: "Remove columns from the dataset that contain excessive missing values, based on a given threshold. The cleaned dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "The columns to consider for removal. Defaults to None (all columns)."
+              items:
+                type: "string"
+            thresh:
+              type: "float"
+              description: "The minimum proportion of missing values required to drop a column (value between 0 and 1). Defaults to 0.5."
+          required: ["dataset_path"]
+
+  - class_name: "verl.tools.data_cleaning_tools.DetectAndHandleOutliersZScoreTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "detect_and_handle_outliers_zscore"
+        description: "Detect and handle outliers using the Z-score method in specified columns of a dataset. The cleaned dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "The columns (or a single column) to check for outliers."
+              items:
+                type: "string"
+            threshold:
+              type: "float"
+              description: "The threshold used to determine outlier thresholds. Defaults to 3.0."
+            method:
+              type: "string"
+              description: "The method to handle outliers. Options: 'clip' (clip the values) or 'remove' (remove the outliers). Defaults to 'clip'."
+
+  - class_name: "verl.tools.data_cleaning_tools.DetectAndHandleOutliersIQRTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "detect_and_handle_outliers_iqr"
+        description: "Detect and handle outliers using the IQR method in specified columns of a dataset. The cleaned dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "The columns (or a single column) to check for outliers."
+              items:
+                type: "string"
+            factor:
+              type: "float"
+              description: "The factor used to determine outlier thresholds. Defaults to 1.5."
+            method:
+              type: "string"
+              description: "The method to handle outliers. Options: 'clip' (clip the values) or 'remove' (remove the outliers). Defaults to 'clip'."
+
+  - class_name: "verl.tools.data_cleaning_tools.RemoveDuplicatesTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "remove_duplicates"
+        description: "Remove duplicate rows from the dataset based on specified columns. The cleaned dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "The columns (or a single column) to consider for identifying duplicates. Defaults to None (all columns)."
+              items:
+                type: "string"
+            keep:
+              type: "string"
+              description: "Determines which duplicates to keep. Options: 'first', 'last', or False (drop all duplicates). Defaults to 'first'."
+          required: ["dataset_path"]
+
+  - class_name: "verl.tools.data_cleaning_tools.ConvertDataTypesTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "convert_data_types"
+        description: "Convert the data type of specified columns in the dataset. The cleaned dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "The columns (or a single column) to convert."
+              items:
+                type: "string"
+            target_type:
+              type: "string"
+              description: "The target data type to convert to. Options: 'int', 'float', 'str', 'bool', 'datetime'."
+          required: ["dataset_path", "columns", "target_type"]
+
+  - class_name: "verl.tools.data_cleaning_tools.FormatDatetimeTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "format_datetime"
+        description: "Format datetime columns in the dataset to a specified format. The cleaned dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "The columns (or a single column) to format as datetime."
+              items:
+                type: "string"
+            format:
+              type: "string"
+              description: "The desired output format for datetime. Defaults to '%Y-%m-%d %H:%M:%S'."
+            errors:
+              type: "string"
+              description: "How to handle parsing errors. Options: 'raise', 'coerce', 'ignore'. Defaults to 'coerce'."
+          required: ["dataset_path", "columns"]
+
+  - class_name: "verl.tools.data_cleaning_tools.DataCleaningToolCreationTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "data_cleaning_tool_creation"
+        description: "Create a **general-purpose, reusable data cleaning tool** when necessary to solve the current task. The generated tool should be **dataset-agnostic** and applicable to a wide range of data cleaning scenarios rather than being tailored to a specific dataset or variable. The tool will be saved as a Python script, executed immediately, and return the execution results, including any printed outputs or errors. The created tool is expected to be reusable in future data cleaning tasks within an autonomous data science pipeline."
+        parameters:
+          type: "object"
+          properties:
+            code:
+              type: "string"
+              description: "The Python code of the newly created data cleaning tool. The tool must follow the strict format requirement and be general enough for reuse as: ```python\ndef tool_name(parameters):\n    # detail of the code\n\n# execute the tool\nif __name__ == '__main__':\n    parameters = {...}\n    tool_name(parameters)\n```"
+            script_file_name:
+              type: "string"
+              description: "The name of the Python script of the newly created tool will be saved and executed."
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+          required: ["code", "script_file_name", "dataset_path"]

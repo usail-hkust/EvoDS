@@ -1,0 +1,371 @@
+tools:
+  - class_name: "verl.tools.machine_learning_tools.LogisticRegressionTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "logistic_regression"
+        description: "Execute a logistic regression model with cross-validation, generate predictions on the test set, and save the submission file."
+        parameters:
+          type: "object"
+          required: ["train_dataset_path", "test_dataset_path", "X_columns", "Y_column", "submission_columns", "submission_file_path"]
+          properties:
+            train_dataset_path:
+              type: "string"
+              description: "Path to the training dataset file."
+            test_dataset_path:
+              type: "string"
+              description: "Path to the testing dataset file."
+            X_columns:
+              type: "list"
+              description: "List of numerical feature column names for training."
+              items:
+                type: "string"
+            Y_column:
+              type: "string"
+              description: "The target label column."
+            submission_columns:
+              type: "list"
+              description: "Columns from the test dataset to include in the submission file."
+              items:
+                type: "string"
+            submission_file_path:
+              type: "string"
+              description: "File path to save the submission file."
+  
+  - class_name: "verl.tools.machine_learning_tools.LinearRegressionTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "linear_regression"
+        description: "Execute a linear regression model with cross-validation, generate predictions on the test set, and save the submission file."
+        parameters:
+          type: "object"
+          required: ["train_dataset_path", "test_dataset_path", "X_columns", "Y_column", "submission_columns", "submission_file_path"]
+          properties:
+            train_dataset_path:
+              type: "string"
+              description: "Path to the training dataset file."
+            test_dataset_path:
+              type: "string"
+              description: "Path to the testing dataset file."
+            X_columns:
+              type: "list"
+              description: "List of numerical feature column names for training."
+              items:
+                type: "string"
+            Y_column:
+              type: "string"
+              description: "The target label column."
+            submission_columns:
+              type: "list"
+              description: "Columns from the test dataset to include in the submission file."
+              items:
+                type: "string"
+            submission_file_path:
+              type: "string"
+              description: "File path to save the submission file."
+  
+  - class_name: "verl.tools.machine_learning_tools.RandomForestRegressionTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "random_forest_regression"
+        description: "Execute a random forest regression model with cross-validation, generate predictions on the test set, and save the submission file."
+        parameters:
+          type: "object"
+          required: ["train_dataset_path", "test_dataset_path", "X_columns", "Y_column", "submission_columns", "submission_file_path"]
+          properties:
+            train_dataset_path:
+              type: "string"
+              description: "Path to the training dataset file."
+            test_dataset_path:
+              type: "string"
+              description: "Path to the testing dataset file."
+            X_columns:
+              type: "list"
+              description: "List of numerical feature column names for training."
+              items:
+                type: "string"
+            Y_column:
+              type: "string"
+              description: "The target label column."
+            submission_columns:
+              type: "list"
+              description: "Columns from the test dataset to include in the submission file."
+              items:
+                type: "string"
+            submission_file_path:
+              type: "string"
+              description: "File path to save the submission file."
+  
+  - class_name: "verl.tools.machine_learning_tools.RandomForestClassificationTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "random_forest_classification"
+        description: "Execute a random forest classification model with cross-validation, generate predictions on the test set, and save the submission file."
+        parameters:
+          type: "object"
+          required: ["train_dataset_path", "test_dataset_path", "X_columns", "Y_column", "submission_columns", "submission_file_path"]
+          properties:
+            train_dataset_path:
+              type: "string"
+              description: "Path to the training dataset file."
+            test_dataset_path:
+              type: "string"
+              description: "Path to the testing dataset file."
+            X_columns:
+              type: "list"
+              description: "List of numerical feature column names for training."
+              items:
+                type: "string"
+            Y_column:
+              type: "string"
+              description: "The target label column."
+            submission_columns:
+              type: "list"
+              description: "Columns from the test dataset to include in the submission file."
+              items:
+                type: "string"
+            submission_file_path:
+              type: "string"
+              description: "File path to save the submission file."
+  
+  - class_name: "verl.tools.machine_learning_tools.XGBoostRegressionTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "xgboost_regression"
+        description: "Execute an XGBoost regression model with cross-validation, generate predictions on the test set, and save the submission file."
+        parameters:
+          type: "object"
+          required: ["train_dataset_path", "test_dataset_path", "X_columns", "Y_column", "submission_columns", "submission_file_path"]
+          properties:
+            train_dataset_path:
+              type: "string"
+              description: "Path to the training dataset file."
+            test_dataset_path:
+              type: "string"
+              description: "Path to the testing dataset file."
+            X_columns:
+              type: "list"
+              description: "List of numerical feature column names for training."
+              items:
+                type: "string"
+            Y_column:
+              type: "string"
+              description: "The target label column."
+            submission_columns:
+              type: "list"
+              description: "Columns from the test dataset to include in the submission file."
+              items:
+                type: "string"
+            submission_file_path:
+              type: "string"
+              description: "File path to save the submission file."
+  
+  - class_name: "verl.tools.machine_learning_tools.XGBoostClassificationTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "xgboost_classification"
+        description: "Execute an XGBoost classification model with cross-validation, generate predictions on the test set, and save the submission file."
+        parameters:
+          type: "object"
+          required: ["train_dataset_path", "test_dataset_path", "X_columns", "Y_column", "submission_columns", "submission_file_path"]
+          properties:
+            train_dataset_path:
+              type: "string"
+              description: "Path to the training dataset file."
+            test_dataset_path:
+              type: "string"
+              description: "Path to the testing dataset file."
+            X_columns:
+              type: "list"
+              description: "List of numerical feature column names for training."
+              items:
+                type: "string"
+            Y_column:
+              type: "string"
+              description: "The target label column."
+            submission_columns:
+              type: "list"
+              description: "Columns from the test dataset to include in the submission file."
+              items:
+                type: "string"
+            submission_file_path:
+              type: "string"
+              description: "File path to save the submission file."
+  
+  - class_name: "verl.tools.machine_learning_tools.LightGBMRegressionTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "lightgbm_regression"
+        description: "Execute a LightGBM regression model with cross-validation, generate predictions on the test set, and save the submission file."
+        parameters:
+          type: "object"
+          required: ["train_dataset_path", "test_dataset_path", "X_columns", "Y_column", "submission_columns", "submission_file_path"]
+          properties:
+            train_dataset_path:
+              type: "string"
+              description: "Path to the training dataset file."
+            test_dataset_path:
+              type: "string"
+              description: "Path to the testing dataset file."
+            X_columns:
+              type: "list"
+              description: "List of numerical feature column names for training."
+              items:
+                type: "string"
+            Y_column:
+              type: "string"
+              description: "The target label column."
+            submission_columns:
+              type: "list"
+              description: "Columns from the test dataset to include in the submission file."
+              items:
+                type: "string"
+            submission_file_path:
+              type: "string"
+              description: "File path to save the submission file."
+  
+  - class_name: "verl.tools.machine_learning_tools.LightGBMClassificationTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "lightgbm_classification"
+        description: "Execute a LightGBM classification model with cross-validation, generate predictions on the test set, and save the submission file."
+        parameters:
+          type: "object"
+          required: ["train_dataset_path", "test_dataset_path", "X_columns", "Y_column", "submission_columns", "submission_file_path"]
+          properties:
+            train_dataset_path:
+              type: "string"
+              description: "Path to the training dataset file."
+            test_dataset_path:
+              type: "string"
+              description: "Path to the testing dataset file."
+            X_columns:
+              type: "list"
+              description: "List of numerical feature column names for training."
+              items:
+                type: "string"
+            Y_column:
+              type: "string"
+              description: "The target label column."
+            submission_columns:
+              type: "list"
+              description: "Columns from the test dataset to include in the submission file."
+              items:
+                type: "string"
+            submission_file_path:
+              type: "string"
+              description: "File path to save the submission file."
+  
+  - class_name: "verl.tools.machine_learning_tools.CatBoostRegressionTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "catboost_regression"
+        description: "Execute a CatBoost regression model with cross-validation, generate predictions on the test set, and save the submission file."
+        parameters:
+          type: "object"
+          required: ["train_dataset_path", "test_dataset_path", "X_columns", "Y_column", "submission_columns", "submission_file_path"]
+          properties:
+            train_dataset_path:
+              type: "string"
+              description: "Path to the training dataset file."
+            test_dataset_path:
+              type: "string"
+              description: "Path to the testing dataset file."
+            X_columns:
+              type: "list"
+              description: "List of numerical feature column names for training."
+              items:
+                type: "string"
+            Y_column:
+              type: "string"
+              description: "The target label column."
+            submission_columns:
+              type: "list"
+              description: "Columns from the test dataset to include in the submission file."
+              items:
+                type: "string"
+            submission_file_path:
+              type: "string"
+              description: "File path to save the submission file."
+  
+  - class_name: "verl.tools.machine_learning_tools.CatBoostClassificationTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "catboost_classification"
+        description: "Execute a CatBoost classification model with cross-validation, generate predictions on the test set, and save the submission file."
+        parameters:
+          type: "object"
+          required: ["train_dataset_path", "test_dataset_path", "X_columns", "Y_column", "submission_columns", "submission_file_path"]
+          properties:
+            train_dataset_path:
+              type: "string"
+              description: "Path to the training dataset file."
+            test_dataset_path:
+              type: "string"
+              description: "Path to the testing dataset file."
+            X_columns:
+              type: "list"
+              description: "List of numerical feature column names for training."
+              items:
+                type: "string"
+            Y_column:
+              type: "string"
+              description: "The target label column."
+            submission_columns:
+              type: "list"
+              description: "Columns from the test dataset to include in the submission file."
+              items:
+                type: "string"
+            submission_file_path:
+              type: "string"
+              description: "File path to save the submission file."
+  
+  - class_name: "verl.tools.machine_learning_tools.MachineLearningToolCreationTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "machine_learning_tool_creation"
+        description: "Create a **general-purpose, reusable machine learning tool** when necessary to solve the current task. The generated tool should be **dataset-agnostic** and applicable to a wide range of machine learning scenarios rather than being tailored to a specific dataset or variable. The tool will be saved as a Python script, executed immediately, and return the execution results, including any printed outputs or errors. The created tool is expected to be reusable in future machine learning tasks within an autonomous data science pipeline."
+        parameters:
+          type: "object"
+          required: ["code", "script_file_name"]
+          properties:
+            code:
+              type: "string"
+              description: "The Python code of the newly created machine learning tool. The tool must follow the strict format requirement and be general enough for reuse as: ```python\ndef tool_name(parameters):\n    # detail of the code\n\n# execute the tool\nif __name__ == '__main__':\n    parameters = {...}\n    tool_name(parameters)\n```"
+            script_file_name:
+              type: "string"
+              description: "The filename of the Python script to be saved and executed."
+  
+  

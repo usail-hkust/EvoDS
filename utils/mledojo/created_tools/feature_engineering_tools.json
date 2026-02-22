@@ -1,0 +1,82 @@
+{
+    "flatten_audio_embeddings": {
+        "code": "import pandas as pd\nimport numpy as np\nimport json\n\ndef flatten_audio_embeddings(parameters):\n    \"\"\"\n    Flatten audio embeddings from JSON data into a feature vector.\n    Each sample has audio_embedding which is a list of frames (each frame is 128-dimensional).\n    Flatten these embeddings into a single feature vector and handle variable-length sequences.\n    \n    Parameters:\n    parameters (dict): Dictionary containing:\n        - dataset_path (str): Path to the input JSON file\n        - output_path (str): Path to save the processed JSON file\n        - num_frames (int): Expected number of frames (default: 10)\n        - frame_dim (int): Dimension of each frame (default: 128)\n        - columns_to_keep (list): Additional columns to include in the output\n    \"\"\"\n    \n    # Extract parameters\n    dataset_path = parameters['dataset_path']\n    output_path = parameters.get('output_path', 'processed_dataset.json')\n    num_frames = parameters.get('num_frames', 10)\n    frame_dim = parameters.get('frame_dim', 128)\n    columns_to_keep = parameters.get('columns_to_keep', ['vid_id', 'start_time_seconds_youtube_clip', 'end_time_seconds_youtube_clip', 'is_turkey'])\n    \n    # Load the dataset\n    with open(dataset_path, 'r') as f:\n        data = json.load(f)\n    \n    # Process each sample\n    processed_data = []\n    \n    for sample in data:\n        processed_sample = {}\n        \n        # Keep the specified columns\n        for col in columns_to_keep:\n            if col in sample:\n                processed_sample[col] = sample[col]\n        \n        # Process audio embeddings\n        if 'audio_embedding' in sample:\n            embeddings = sample['audio_embedding']\n            \n            # Handle variable-length embeddings\n            if len(embeddings) < num_frames:\n                # Pad with zeros\n                padding_needed = num_frames - len(embeddings)\n                padded_embeddings = embeddings + [[0] * frame_dim] * padding_needed\n                flattened = np.array(padded_embeddings).flatten().tolist()\n            elif len(embeddings) > num_frames:\n                # Truncate if longer than expected\n                flattened = np.array(embeddings[:num_frames]).flatten().tolist()\n            else:\n                # Exact length\n                flattened = np.array(embeddings).flatten().tolist()\n            \n            # Create feature names\n            for i in range(num_frames):\n                for j in range(frame_dim):\n                    feature_name = f'audio_frame_{i}_dim_{j}'\n                    processed_sample[feature_name] = flattened[i * frame_dim + j]\n        \n        processed_data.append(processed_sample)\n    \n    # Convert to DataFrame\n    df = pd.DataFrame(processed_data)\n    \n    # Save the processed data\n    df.to_json(output_path, orient='records', indent=2)\n    \n    print(f\"Dataset processed successfully!\")\n    print(f\"Original samples: {len(data)}\")\n    print(f\"Processed samples: {len(processed_data)}\")\n    print(f\"Number of features: {len(df.columns)}\")\n    print(f\"Output saved to: {output_path}\")\n    \n    return output_path",
+        "tool_config": {
+            "type": "function",
+            "function": {
+                "name": "flatten_audio_embeddings",
+                "description": "Flatten audio embeddings from JSON data into a feature vector by handling variable-length sequences through padding or truncation.",
+                "parameters": {
+                    "type": "object",
+                    "required": [
+                        "dataset_path"
+                    ],
+                    "properties": {
+                        "dataset_path": {
+                            "type": "string",
+                            "description": "Path to the input JSON file"
+                        },
+                        "output_path": {
+                            "type": "string",
+                            "description": "Path to save the processed JSON file"
+                        },
+                        "num_frames": {
+                            "type": "integer",
+                            "description": "Expected number of frames"
+                        },
+                        "frame_dim": {
+                            "type": "integer",
+                            "description": "Dimension of each frame"
+                        },
+                        "columns_to_keep": {
+                            "type": "array",
+                            "description": "Additional columns to include in the output"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "flatten_audio_embeddings_with_padding": {
+        "code": "import pandas as pd\nimport numpy as np\nimport json\nfrom typing import List, Dict, Any\n\ndef flatten_audio_embeddings_with_padding(parameters: Dict[str, Any]) -> str:\n    \"\"\"\n    Flatten audio embeddings from JSON data into feature vectors with padding.\n    \n    Parameters:\n    parameters (dict): Dictionary containing:\n        - dataset_path (str): Path to the input JSON file\n        - embedding_column (str): Name of the column containing audio embeddings\n        - expected_frames (int): Expected number of frames (default: 10)\n        - expected_dimensions (int): Expected dimensions per frame (default: 128)\n        - output_path (str): Path to save the processed dataset\n        - additional_columns (list): List of additional columns to include\n    \n    Returns:\n    str: Path to the saved processed dataset\n    \"\"\"\n    \n    # Extract parameters\n    dataset_path = parameters['dataset_path']\n    embedding_column = parameters.get('embedding_column', 'audio_embedding')\n    expected_frames = parameters.get('expected_frames', 10)\n    expected_dimensions = parameters.get('expected_dimensions', 128)\n    output_path = parameters.get('output_path', 'processed_dataset.json')\n    additional_columns = parameters.get('additional_columns', [])\n    \n    # Load the dataset\n    with open(dataset_path, 'r') as f:\n        data = json.load(f)\n    \n    # Convert to DataFrame\n    df = pd.DataFrame(data)\n    \n    # Process each row\n    processed_rows = []\n    \n    for _, row in df.iterrows():\n        processed_row = {}\n        \n        # Include additional columns\n        for col in additional_columns:\n            if col in row:\n                processed_row[col] = row[col]\n        \n        # Process audio embeddings\n        if embedding_column in row:\n            embeddings = row[embedding_column]\n            \n            # Handle cases where embedding might be missing\n            if embeddings is None or (isinstance(embeddings, list) and len(embeddings) == 0):\n                # Create zero vector\n                flattened_embedding = [0.0] * (expected_frames * expected_dimensions)\n            else:\n                # Flatten embeddings with padding\n                flattened_embedding = []\n                \n                # Process each frame\n                for i in range(expected_frames):\n                    if i < len(embeddings):\n                        # Add actual embedding\n                        frame = embeddings[i]\n                        if len(frame) < expected_dimensions:\n                            # Pad frame if shorter than expected\n                            frame = list(frame) + [0.0] * (expected_dimensions - len(frame))\n                        elif len(frame) > expected_dimensions:\n                            # Truncate if longer than expected\n                            frame = frame[:expected_dimensions]\n                        flattened_embedding.extend(frame)\n                    else:\n                        # Pad with zeros for missing frames\n                        flattened_embedding.extend([0.0] * expected_dimensions)\n            \n            # Create feature columns for the flattened embedding\n            for i, value in enumerate(flattened_embedding):\n                processed_row[f'{embedding_column}_{i}'] = value\n        \n        processed_rows.append(processed_row)\n    \n    # Create processed DataFrame\n    processed_df = pd.DataFrame(processed_rows)\n    \n    # Save the processed dataset\n    processed_df.to_json(output_path, orient='records', indent=2)\n    \n    print(f\"Dataset processed successfully. Saved to {output_path}\")\n    print(f\"Original shape: {df.shape}\")\n    print(f\"Processed shape: {processed_df.shape}\")\n    \n    return output_path",
+        "tool_config": {
+            "type": "function",
+            "function": {
+                "name": "flatten_audio_embeddings_with_padding",
+                "description": "Flatten audio embeddings from JSON data into feature vectors with padding.",
+                "parameters": {
+                    "type": "object",
+                    "required": [
+                        "dataset_path"
+                    ],
+                    "properties": {
+                        "dataset_path": {
+                            "type": "string",
+                            "description": "Path to the input JSON file"
+                        },
+                        "embedding_column": {
+                            "type": "string",
+                            "description": "Name of the column containing audio embeddings"
+                        },
+                        "expected_frames": {
+                            "type": "integer",
+                            "description": "Expected number of frames"
+                        },
+                        "expected_dimensions": {
+                            "type": "integer",
+                            "description": "Expected dimensions per frame"
+                        },
+                        "output_path": {
+                            "type": "string",
+                            "description": "Path to save the processed dataset"
+                        },
+                        "additional_columns": {
+                            "type": "array",
+                            "description": "List of additional columns to include"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

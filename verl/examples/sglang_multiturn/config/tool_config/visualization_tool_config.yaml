@@ -1,0 +1,360 @@
+tools:
+  - class_name: "verl.tools.visualization_tools.LinePlotTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "plot_line"
+        description: "Generate line plot and save the output to the specified file."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns", "save_filename"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "List of columns to be used for the plot. The number of columns should be 1 or 2."
+            save_filename:
+              type: "string"
+              description: "The filename to save the plot to."
+            title:
+              type: "string"
+              description: "Title for the plot. Default is None."
+            xlabel:
+              type: "string"
+              description: "Label for the x-axis. Default is None."
+            ylabel:
+              type: "string"
+              description: "Label for the y-axis. Default is None."
+            legend_title:
+              type: "string"
+              description: "Title for the legend. Default is None."
+            xtick_labels:
+              type: "list"
+              description: "Custom labels for the x-axis ticks. Default is None."
+            ytick_labels:
+              type: "list"
+              description: "Custom labels for the y-axis ticks. Default is None."
+            color:
+              type: "string"
+              description: "Color to use for the plot. Default is 'blue'."
+            figsize:
+              type: "tuple"
+              description: "Size of the plot as a tuple (width, height). Default is (10, 6)."
+
+  - class_name: "verl.tools.visualization_tools.BarPlotTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "plot_bar"
+        description: "Generate bar plot and save the output to the specified file."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns", "save_filename"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "List of columns to be used for the plot. The number of columns should be 1 or 2."
+            save_filename:
+              type: "string"
+              description: "The filename to save the plot to."
+            title:
+              type: "string"
+              description: "Title for the plot. Default is None."
+            xlabel:
+              type: "string"
+              description: "Label for the x-axis. Default is None."
+            ylabel:
+              type: "string"
+              description: "Label for the y-axis. Default is None."
+            legend_title:
+              type: "string"
+              description: "Title for the legend. Default is None."
+            xtick_labels:
+              type: "list"
+              description: "Custom labels for the x-axis ticks. Default is None."
+            ytick_labels:
+              type: "list"
+              description: "Custom labels for the y-axis ticks. Default is None."
+            color:
+              type: "string"
+              description: "Color to use for the plot. Default is 'blue'."
+            figsize:
+              type: "tuple"
+              description: "Size of the plot as a tuple (width, height). Default is (10, 6)."
+
+  - class_name: "verl.tools.visualization_tools.HistogramPlotTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "plot_histogram"
+        description: "Generate histogram plot and save the output to the specified file."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "column", "save_filename"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            column:
+              type: "string"
+              description: "The name of column to be used for the plot."
+            save_filename:
+              type: "string"
+              description: "The filename to save the plot to."
+            title:
+              type: "string"
+              description: "Title for the plot. Default is None."
+            xlabel:
+              type: "string"
+              description: "Label for the x-axis. Default is None."
+            ylabel:
+              type: "string"
+              description: "Label for the y-axis. Default is None."
+            legend_title:
+              type: "string"
+              description: "Title for the legend. Default is None."
+            xtick_labels:
+              type: "list"
+              description: "Custom labels for the x-axis ticks. Default is None."
+            ytick_labels:
+              type: "list"
+              description: "Custom labels for the y-axis ticks. Default is None."
+            bins:
+              type: "int"
+              description: "Number of bins to use for histogram. Default is 10."
+            color:
+              type: "string"
+              description: "Color to use for the plot. Default is 'blue'."
+            figsize:
+              type: "tuple"
+              description: "Size of the plot as a tuple (width, height). Default is (10, 6)."
+
+  - class_name: "verl.tools.visualization_tools.BoxPlotTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "plot_boxplot"
+        description: "Generate box plot and save the output to the specified file."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "column", "save_filename"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            column:
+              type: "string"
+              description: "The column to be used for the plot."
+            save_filename:
+              type: "string"
+              description: "The filename to save the plot to."
+            title:
+              type: "string"
+              description: "Title for the plot. Default is None."
+            xtick_labels:
+              type: "list"
+              description: "Custom labels for the x-axis ticks. Default is None."
+            ytick_labels:
+              type: "list"
+              description: "Custom labels for the y-axis ticks. Default is None."
+            group_by:
+              type: "string"
+              description: "Column to group the data by. Default is None."
+            color:
+              type: "string"
+              description: "Color to use for the plot. Default is 'blue'."
+            figsize:
+              type: "tuple"
+              description: "Size of the plot as a tuple (width, height). Default is (10, 6)."
+
+  - class_name: "verl.tools.visualization_tools.ScatterPlotTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "plot_scatter"
+        description: "Generate scatter plot and save the output to the specified file."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns", "save_filename"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "List of columns to be used for the plot. The number of columns should be 1 or 2."
+            save_filename:
+              type: "string"
+              description: "The filename to save the plot to."
+            title:
+              type: "string"
+              description: "Title for the plot. Default is None."
+            xlabel:
+              type: "string"
+              description: "Label for the x-axis. Default is None."
+            ylabel:
+              type: "string"
+              description: "Label for the y-axis. Default is None."
+            legend_title:
+              type: "string"
+              description: "Title for the legend. Default is None."
+            xtick_labels:
+              type: "list"
+              description: "Custom labels for the x-axis ticks. Default is None."
+            ytick_labels:
+              type: "list"
+              description: "Custom labels for the y-axis ticks. Default is None."
+            color:
+              type: "string"
+              description: "Color to use for the plot. Default is 'blue'."
+            figsize:
+              type: "tuple"
+              description: "Size of the plot as a tuple (width, height). Default is (10, 6)."
+            hue:
+              type: "string"
+              description: "Column to color the points by. Default is None."
+            size:
+              type: "string"
+              description: "Column to determine the size of scatter points. Default is None."
+
+  - class_name: "verl.tools.visualization_tools.HeatmapPlotTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "plot_heatmap"
+        description: "Generate heatmap and save the output to the specified file."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns", "save_filename"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "List of columns to be used for the plot. The number of columns should more than 1."
+            save_filename:
+              type: "string"
+              description: "The filename to save the plot to."
+            title:
+              type: "string"
+              description: "Title for the plot. Default is None."
+            legend_title:
+              type: "string"
+              description: "Title for the legend. Default is None."
+            xtick_labels:
+              type: "list"
+              description: "Custom labels for the x-axis ticks. Default is None."
+            ytick_labels:
+              type: "list"
+              description: "Custom labels for the y-axis ticks. Default is None."
+            figsize:
+              type: "tuple"
+              description: "Size of the plot as a tuple (width, height). Default is (10, 6)."
+            annot:
+              type: "bool"
+              description: "Whether to annotate the heatmap with values. Default is True."
+            cmap:
+              type: "string"
+              description: "Colormap to use for the heatmap. Default is 'coolwarm'."
+
+  - class_name: "verl.tools.visualization_tools.PiePlotTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "plot_pie"
+        description: "Generate pie plot and save the output to the specified file."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "column", "save_filename"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            column:
+              type: "string"
+              description: "The name of column to be used for the plot."
+            save_filename:
+              type: "string"
+              description: "The filename to save the plot to."
+            title:
+              type: "string"
+              description: "Title for the plot. Default is None."
+            figsize:
+              type: "tuple"
+              description: "Size of the plot as a tuple (width, height). Default is (10, 6)."
+            autopct:
+              type: "string"
+              description: "String format for displaying percentages on the pie chart. Default is '%1.1f%%'."
+
+  - class_name: "verl.tools.visualization_tools.PairPlotTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "plot_pairplot"
+        description: "Generate pairplot and save the output to the specified file."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns", "save_filename"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "List of columns to be used for the plot. The number of columns should more than 1."
+            save_filename:
+              type: "string"
+              description: "The filename to save the plot to."
+            title:
+              type: "string"
+              description: "Title for the plot. Default is None."
+            hue:
+              type: "string"
+              description: "Column to color the points by. Default is None."
+            palette:
+              type: "string"
+              description: "Color palette to use for pairplot. Default is 'muted'."
+
+  - class_name: "verl.tools.visualization_tools.VisualizationToolCreationTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "visualization_tool_creation"
+        description: "Create a **general-purpose, reusable visualization tool** when necessary to solve the current task. The generated tool should be **dataset-agnostic** and applicable to a wide range of visualization scenarios rather than being tailored to a specific dataset or variable. The tool will be saved as a Python script, executed immediately, and return the execution results, including any printed outputs or errors. The created tool is expected to be reusable in future visualization tasks within an autonomous data science pipeline."
+        parameters:
+          type: "object"
+          required: ["code", "script_file_name", "save_filename"]
+          properties:
+            code:
+              type: "string"
+              description: "The Python code of the newly created visualization tool. The tool must follow the strict format requirement and be general enough for reuse as: ```python\ndef tool_name(parameters):\n    # detail of the code\n\n# execute the tool\nif __name__ == '__main__':\n    parameters = {...}\n    tool_name(parameters)\n```"
+            script_file_name:
+              type: "string"
+              description: "The name of the Python script of the newly created tool to be saved and executed."
+            save_filename:
+              type: "string"
+              description: "The filename to save the plot to."

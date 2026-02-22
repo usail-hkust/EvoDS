@@ -1,0 +1,311 @@
+tools:
+  - class_name: "verl.tools.feature_engineering_tools.OneHotEncodingTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "one_hot_encode"
+        description: "Perform one-hot encoding on specified categorical columns. The processed dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "Columns to perform encoding on."
+              items:
+                type: "string"
+            drop_original:
+              type: "bool"
+              description: "If True, drop original columns after encoding. Defaults to False."
+            handle_unknown:
+              type: "string"
+              description: "How to handle unknown categories during encoding. Options: 'error', 'ignore'. Defaults to 'error'."
+
+  - class_name: "verl.tools.feature_engineering_tools.LabelEncodingTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "label_encode"
+        description: "Perform label encoding on specified categorical columns. The processed dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "Columns to perform encoding on."
+              items:
+                type: "string"
+
+  - class_name: "verl.tools.feature_engineering_tools.FrequencyEncodingTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "frequency_encode"
+        description: "Perform frequency encoding on specified categorical columns. The processed dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "Columns to perform encoding on."
+              items:
+                type: "string"
+            drop_original:
+              type: "bool"
+              description: "If True, drop original columns after encoding. Defaults to False."
+
+  - class_name: "verl.tools.feature_engineering_tools.TargetEncodingTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "target_encode"
+        description: "Perform target encoding on specified categorical columns. The processed dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns", "target"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "Columns to perform encoding on."
+              items:
+                type: "string"
+            target:
+              type: "string"
+              description: "The target column for encoding."
+            min_samples_leaf:
+              type: "int"
+              description: "Minimum number of samples required to include category in the encoding. Default is 1."
+            smoothing:
+              type: "float"
+              description: "Smoothing factor to balance categorical average vs. global prior. Default is 1.0."
+
+  - class_name: "verl.tools.feature_engineering_tools.CorrelationFeatureSelectionTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "correlation_feature_selection"
+        description: "Perform feature selection based on correlation with the target column. The selected features will be returned."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "target"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            target:
+              type: "string"
+              description: "The target column to calculate correlation."
+            method:
+              type: "string"
+              description: "The correlation method to use. Options: 'pearson', 'spearman', 'kendall'. Defaults to 'pearson'."
+            threshold:
+              type: "float"
+              description: "The threshold for feature selection. Features with absolute correlation greater than this value will be selected. Defaults to 0.5."
+
+  - class_name: "verl.tools.feature_engineering_tools.VarianceFeatureSelectionTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "variance_feature_selection"
+        description: "Perform feature selection based on variance analysis. The selected features will be returned."
+        parameters:
+          type: "object"
+          required: ["dataset_path"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            threshold:
+              type: "float"
+              description: "The threshold for feature selection. Features with variance lower than this threshold will be removed. Defaults to 0.0."
+            columns:
+              type: "list"
+              description: "Columns to consider for variance-based feature selection. If None, use all columns. Defaults to None."
+              items:
+                type: "string"
+
+  - class_name: "verl.tools.feature_engineering_tools.ScaleFeaturesTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "scale_features"
+        description: "Scale numerical features in specified columns using the selected scaling method. The processed dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "Columns to scale."
+            method:
+              type: "string"
+              description: "The scaling method. Options: 'standard', 'minmax', 'robust'. Defaults to 'standard'."
+            copy:
+              type: "bool"
+              description: "Whether to perform scaling in place or copy the data. Defaults to True."
+          required: ["dataset_path", "columns"]
+
+  - class_name: "verl.tools.feature_engineering_tools.PerformPCATool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "perform_pca"
+        description: "Perform Principal Component Analysis (PCA) on the dataset. The processed dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            n_components:
+              type: "int or float"
+              description: "If int, it represents the exact number of components. If float between 0 and 1, it represents the proportion of variance to be retained."
+            columns:
+              type: "list"
+              description: "Columns to apply PCA to. Defaults to None (all columns)."
+            scale:
+              type: "bool"
+              description: "Whether to scale the data before PCA. Defaults to True."
+          required: ["dataset_path", "n_components"]
+
+  - class_name: "verl.tools.feature_engineering_tools.PerformRFETool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "perform_rfe"
+        description: "Perform Recursive Feature Elimination (RFE) to select important features using the specified estimator. The processed dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            target:
+              type: "string"
+              description: "The target column."
+            n_features_to_select:
+              type: "int or float"
+              description: "If int, it represents the exact number of features to select. If float between 0 and 1, it represents the proportion of features to select. Defaults to 0.5."
+            step:
+              type: "int"
+              description: "Number of features to remove at each iteration. Defaults to 1."
+            estimator:
+              type: "string"
+              description: "The estimator for feature ranking. Options: 'auto', 'logistic', 'rf', 'linear', 'rf_regressor'. Defaults to 'auto'."
+            columns:
+              type: "list"
+              description: "Columns to consider for RFE. If None, use all columns except the target. Defaults to None."
+          required: ["dataset_path", "target", "n_features_to_select"]
+
+  - class_name: "verl.tools.feature_engineering_tools.PolynomialFeatureCreationTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "create_polynomial_features"
+        description: "Create polynomial features based on specified columns. The processed dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "The columns (or a list of columns) to use for feature creation."
+              items:
+                type: "string"
+            degree:
+              type: "int"
+              description: "Degree of the polynomial features. Defaults to 2."
+            interaction_only:
+              type: "bool"
+              description: "If True, only interaction features will be generated. Defaults to False."
+            include_bias:
+              type: "bool"
+              description: "If True, include the bias (intercept) term. Defaults to False."
+
+  - class_name: "verl.tools.feature_engineering_tools.CombinationFeatureCreationTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "create_feature_combinations"
+        description: "Create feature combinations (multiplication or addition) based on specified columns. The processed dataset will be saved and the filename will be returned."
+        parameters:
+          type: "object"
+          required: ["dataset_path", "columns"]
+          properties:
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+            columns:
+              type: "list"
+              description: "The columns (or a list of columns) to use for feature creation."
+              items:
+                type: "string"
+            combination_type:
+              type: "string"
+              description: "The type of feature combination. Options: 'multiplication' or 'addition'. Defaults to 'multiplication'."
+            max_combination_size:
+              type: "int"
+              description: "Maximum number of features to combine. Defaults to 2."
+
+  - class_name: "verl.tools.feature_engineering_tools.FeatureEngineeringToolCreationTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "feature_engineering_tool_creation"
+        description: "Create a **general-purpose, reusable feature engineering tool** when necessary to solve the current task. The generated tool should be **dataset-agnostic** and applicable to a wide range of feature engineering scenarios rather than being tailored to a specific dataset or variable. The tool will be saved as a Python script, executed immediately, and return the execution results, including any printed outputs or errors. The created tool is expected to be reusable in future feature engineering tasks within an autonomous data science pipeline."
+        parameters:
+          type: "object"
+          properties:
+            code:
+              type: "string"
+              description: "The Python code of the newly created feature engineering tool. The tool must follow the strict format requirement and be general enough for reuse as: ```python\ndef tool_name(parameters):\n    # detail of the code\n\n# execute the tool\nif __name__ == '__main__':\n    parameters = {...}\n    tool_name(parameters)\n```"
+            script_file_name:
+              type: "string"
+              description: "The name of the Python script of the newly created tool will be saved and executed."
+            dataset_path:
+              type: "string"
+              description: "Path to the dataset file to be processed."
+          required: ["code", "script_file_name", "dataset_path"]

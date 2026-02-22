@@ -1,0 +1,4 @@
+{
+    "flatten_audio_embeddings": 1,
+    "flatten_audio_embeddings_with_padding": 1
+}

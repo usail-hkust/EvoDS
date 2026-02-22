@@ -1,0 +1,24 @@
+{
+    "titanic_feature_engineering": {
+        "code": "import pandas as pd\nimport numpy as np\nfrom sklearn.preprocessing import LabelEncoder\n\ndef titanic_feature_engineering(parameters):\n    \"\"\"\n    Perform comprehensive feature engineering on Titanic dataset.\n    \n    Parameters:\n    parameters (dict): Dictionary containing:\n        - dataset_path: Path to the dataset file\n        - output_path: Path to save the processed dataset\n    \"\"\"\n    \n    # Load the dataset\n    df = pd.read_csv(parameters['dataset_path'])\n    \n    print(f\"Original dataset shape: {df.shape}\")\n    print(\"\\nOriginal columns:\", df.columns.tolist())\n    print(\"\\nMissing values before processing:\")\n    print(df.isnull().sum())\n    \n    # 1. Handle missing values\n    # Fill missing Age with median age grouped by Pclass and Sex\n    df['Age'] = df.groupby(['Pclass', 'Sex'])['Age'].transform(lambda x: x.fillna(x.median()))\n    \n    # Fill missing Embarked with mode ('S')\n    df['Embarked'] = df['Embarked'].fillna('S')\n    \n    # 2. Extract features from Name\n    # Extract titles (Mr, Mrs, Miss, Master, etc.)\n    df['Title'] = df['Name'].str.extract(' ([A-Za-z]+)\\.', expand=False)\n    \n    # Consolidate rare titles\n    title_mapping = {\n        'Capt': 'Officer',\n        'Col': 'Officer', \n        'Major': 'Officer',\n        'Dr': 'Officer',\n        'Rev': 'Officer',\n        'Jonkheer': 'Royalty',\n        'Don': 'Royalty',\n        'Sir': 'Royalty',\n        'Lady': 'Royalty',\n        'Countess': 'Royalty',\n        'Dona': 'Royalty',\n        'Mme': 'Mrs',\n        'Ms': 'Miss',\n        'Mlle': 'Miss'\n    }\n    df['Title'] = df['Title'].replace(title_mapping)\n    \n    # 3. Create family-related features\n    df['FamilySize'] = df['SibSp'] + df['Parch'] + 1\n    df['IsAlone'] = (df['FamilySize'] == 1).astype(int)\n    \n    # 4. Create age groups\n    df['AgeGroup'] = pd.cut(df['Age'], bins=[0, 18, 60, 100], \n                           labels=['Child', 'Adult', 'Senior'])\n    \n    # 5. Encode categorical variables\n    # Sex: male=0, female=1\n    df['Sex'] = df['Sex'].map({'male': 0, 'female': 1})\n    \n    # One-hot encode Embarked\n    embarked_dummies = pd.get_dummies(df['Embarked'], prefix='Embarked')\n    df = pd.concat([df, embarked_dummies], axis=1)\n    \n    # One-hot encode Title\n    title_dummies = pd.get_dummies(df['Title'], prefix='Title')\n    df = pd.concat([df, title_dummies], axis=1)\n    \n    # One-hot encode AgeGroup\n    agegroup_dummies = pd.get_dummies(df['AgeGroup'], prefix='AgeGroup')\n    df = pd.concat([df, agegroup_dummies], axis=1)\n    \n    # 6. Drop unnecessary columns\n    columns_to_drop = ['Name', 'Ticket', 'Cabin', 'Embarked', 'Title', 'AgeGroup']\n    # Only drop columns that exist in the dataframe\n    columns_to_drop = [col for col in columns_to_drop if col in df.columns]\n    df = df.drop(columns=columns_to_drop)\n    \n    print(f\"\\nProcessed dataset shape: {df.shape}\")\n    print(\"\\nFinal columns:\", df.columns.tolist())\n    print(\"\\nMissing values after processing:\")\n    print(df.isnull().sum())\n    \n    # Save the processed dataset\n    df.to_csv(parameters['output_path'], index=False)\n    print(f\"\\nProcessed dataset saved to: {parameters['output_path']}\")\n    \n    return df",
+        "tool_config": {
+            "type": "function",
+            "function": {
+                "name": "titanic_feature_engineering",
+                "description": "Perform comprehensive feature engineering on Titanic dataset including handling missing values, extracting features from names, creating family-related features, encoding categorical variables, and saving the processed dataset.",
+                "parameters": {
+                    "type": "object",
+                    "required": [
+                        "parameters"
+                    ],
+                    "properties": {
+                        "parameters": {
+                            "type": "object",
+                            "description": "Dictionary containing dataset_path and output_path"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
