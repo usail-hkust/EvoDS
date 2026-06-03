@@ -5,8 +5,6 @@ Adapted from: https://github.com/thunlp/MatPlotAgent/blob/66864d9ae095a281b8c181
 import base64
 import re
 from llm.async_llm import LLMsConfig, create_llm_instance
-# os.environ["HTTP_PROXY"] = "http://127.0.0.1:20171"
-# os.environ["HTTPS_PROXY"] = "http://127.0.0.1:20171"
 
 
 PROMPT_ORIGIN = """You are an excellent judge at evaluating visualization plots between a model generated plot and the ground truth. You will be giving scores on how well it matches the ground truth plot.

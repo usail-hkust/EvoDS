@@ -1,4 +1,6 @@
-# EvoDS: Self-Evolving Autonomous Data Science Agent with Capability Learning and Context Management
+# EvoDS: Self-Evolving Autonomous Data Science Agent with Skill Learning and Context Management
+
+🎉 Accepted by the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD 2026)
 
 ---
 
@@ -6,31 +8,47 @@
 
 **EvoDS** is a self-evolving autonomous data science agent designed to address two fundamental challenges in LLM-based data science systems:
 
-1. **Reusable Capability Learning** – enabling agents to synthesize, validate, and internalize tool-usage skills from experience.
-2. **Adaptive Context Management** – dynamically compressing long-horizon interaction context to maintain reasoning stability under token constraints.
+1. **Reusable Skill Learning** — enabling agents to synthesize, validate, and internalize reusable tool-usage skills from experience.
+2. **Adaptive Context Management** — dynamically compressing long-horizon interaction history to maintain stable reasoning under limited context budgets.
 
-EvoDS formulates autonomous data science as a decision-making process over an evolving action space under bounded context budgets. It integrates:
+EvoDS formulates autonomous data science as a sequential decision-making process over an evolving action space under bounded context constraints. The framework integrates three key components:
 
-* **Autonomous Capability Acquisition Mechanism (ACAM)**
-  Treats tools as learnable capabilities that can be synthesized and reused.
+### 🔧 Autonomous Skill Acquisition (ASA)
 
-* **Adaptive Context Compression Strategy (ACCS)**
-  Learns when and how to compress interaction history during multi-step reasoning.
+ASA treats tools as learnable capabilities.
+The agent can autonomously synthesize, validate, cache, and reuse executable skills during task solving.
 
-* **Multi-Agent Reinforcement Learning Framework**
-  Jointly optimizes task execution, capability acquisition, and context regulation.
+### 🧠 Adaptive Context Compression (ACC)
+
+ACC dynamically determines when and how to compress interaction history during long-horizon multi-step reasoning, improving context efficiency and reasoning stability.
+
+### 🔁 Agentic Reinforcement Learning
+
+EvoDS jointly optimizes:
+
+* task completion quality,
+* skill acquisition behavior,
+* and context regulation policies
+
+through joint reinforcement learning over multiple agent roles.
 
 ---
 
 ## 📦 Checkpoints
 
-We provide two pretrained checkpoints:
+We provide pretrained checkpoints for EvoDS.
 
-* **`checkpoints/EvoDS-sft-8B`**
-  Supervised fine-tuned model based on **Qwen3-8B**.
+### EvoDS Checkpoint
 
-* **`checkpoints/EvoDS-rl-8B`**
-  Further trained from `EvoDS-sft-8B` using multi-agent reinforcement learning.
+Download the checkpoint from:
+
+* [Hugging Face - EvoDS](https://huggingface.co/yangzhr/EvoDS)
+
+Place the downloaded files under:
+
+```bash
+checkpoints/EvoDS
+```
 
 ---
 
@@ -40,23 +58,38 @@ We provide two pretrained checkpoints:
 
 Edit:
 
-```
+```bash
 config/config.yaml
 ```
 
 Replace:
 
-```
-<your openai key>
+```yaml
+<your_openai_key>
 ```
 
 with your OpenAI API key.
 
 ---
 
-### ▶️ Step 2: Running the Agent
+### 📚 Step 2: Prepare Benchmarks
 
-You can directly launch EvoDS with:
+Due to storage constraints, benchmark datasets are not included in this repository.
+
+Please manually download the following benchmarks before evaluation:
+
+* DABench
+* DA-Code
+* ScienceAgentBench
+* MLE-Dojo
+
+After downloading, place the datasets in the corresponding benchmark directories specified in the configuration files.
+
+---
+
+### ▶️ Step 3: Launch EvoDS
+
+Run:
 
 ```bash
 bash run.sh
@@ -64,17 +97,17 @@ bash run.sh
 
 This script will:
 
-1. Deploy `EvoDS-rl-8B` using **vLLM**
+1. Deploy `EvoDS` using **vLLM**
 2. Sequentially evaluate the agent on:
 
-   * DABench
-   * DA-Code
-   * ScienceAgentBench
-   * MLE-Dojo
+* DABench
+* DA-Code
+* ScienceAgentBench
+* MLE-Dojo
 
 ---
 
-### 🖥 Multi-GPU Configuration
+## 🖥 Multi-GPU Configuration
 
 By default, `run.sh` uses a single GPU:
 
@@ -86,61 +119,82 @@ To use multiple GPUs:
 
 1. Modify:
 
-   ```bash
-   export CUDA_VISIBLE_DEVICES=0,1,2,...
-   ```
+```bash
+export CUDA_VISIBLE_DEVICES=0,1,2,...
+```
+
 2. Update the GPU count in:
 
-   ```bash
-   start_llm "checkpoints/EvoDS-rl-8B" "evods-rl-8b" 1234 1 "nohup.log"
-   ```
+```bash
+start_llm "checkpoints/EvoDS" "EvoDS" 1234 1 "nohup.log"
+```
 
-   Change `1` to the number of GPUs you are using.
+Replace `1` with the number of GPUs you intend to use.
 
 ---
 
 ## 🏋️ Training
 
-We use **VERL** for both SFT and RL training.
-
-### 🔧 Before Training
-
-Replace the API key in:
-
-```
-verl/verl/workers/reward_manager/datascience.py
-```
-
-Change:
-
-```
-your_api_key
-```
-
-to your OpenAI API key.
+We use **VERL** for both supervised fine-tuning (SFT) and reinforcement learning (RL).
 
 ---
 
-### 📂 Enter Training Directory
+### 🔧 Before Training
+
+Edit:
+
+```bash
+verl/verl/workers/reward_manager/datascience.py
+```
+
+Replace:
+
+```python
+your_api_key
+```
+
+with your OpenAI API key.
+
+---
+
+### 📂 Enter the Training Directory
 
 ```bash
 cd verl
 ```
 
+Download **Qwen3-8B** and place it under:
+
+```bash
+Qwen/Qwen3-8B
+```
+
 ---
 
-### 🧠 Supervised Fine-Tuning (SFT)
+## 🧠 Supervised Fine-Tuning (SFT)
+
+Run:
 
 ```bash
 bash examples/sft/multiturn/run_evods_qwen3_8b_multi_turn.sh 4 checkpoints/evods_sft_8b
 ```
 
-* `4` indicates the number of GPUs.
-* Output checkpoint will be saved to `checkpoints/evods_sft_8b`.
+Arguments:
+
+* `4` — number of GPUs
+* `checkpoints/evods_sft_8b` — output checkpoint directory
+
+The trained checkpoint will be saved to:
+
+```bash
+checkpoints/evods_sft_8b
+```
 
 ---
 
-### 🔁 Reinforcement Learning (RL)
+## 🔁 Reinforcement Learning (RL)
+
+Run:
 
 ```bash
 bash examples/sglang_multiturn/run_evods_qwen3_8b.sh
@@ -148,12 +202,9 @@ bash examples/sglang_multiturn/run_evods_qwen3_8b.sh
 
 This stage performs multi-agent reinforcement learning to jointly optimize:
 
-* Task completion quality
-* Tool scheduling efficiency
-* Context length control
+* task completion quality
+* tool scheduling efficiency
+* context length control
+* skill acquisition behavior
 
 ---
-
-## ⚠️ Note on Checkpoints and Benchmarks
-
-Due to storage constraints, the pretrained checkpoints and benchmark datasets are not provided in this repository. They will be publicly released on Hugging Face after the paper is accepted.

@@ -18,26 +18,18 @@ from utils.util import write_program, execute_script
 warnings.filterwarnings("ignore")
 
 
-# FEATURE_ENGINEER_SYS_PROMPT = """You are a data science expert specializing in feature engineering tasks. You have access to a set of tools that can help solve these tasks. When given a dataset path and a feature engineering task description, your first step is to check if the provided tools can directly solve the task. If they can, use the appropriate tool to perform the feature engineering. The tool will automatically save the processed dataset.
-# 
-# **If the tools cannot directly solve the task, you should not call any tool and directly write Python code that can address the task according to the given task description**. After processing, ensure that the processed data is saved to the appropriate path.
-# 
-# For example:
-# ```python
-# def feature_engineering_tool(dataset_path):
-#     # feature engineering code here
-# 
-# # Perform the feature engineering task on the dataset. Note: You should use a real dataset path instead of the example path 'dataset.csv'
-# feature_engineering_tool('dataset.csv')
-# ```
-# """
+FEATURE_ENGINEER_SYS_PROMPT = """You are a data science expert specializing in feature engineering tasks. You are working as a sub-agent in a multi-agent system.
 
+# GLOBAL CONTEXT #
+The global context contains the overall task objective. You should use this information to understand the broader goal and maintain consistency with the overall workflow.
 
-FEATURE_ENGINEER_SYS_PROMPT = """You are a data science expert specializing in feature engineering tasks. You have access to a set of tools that can help solve these tasks. When given a dataset path and a feature engineering task description, your first step is to check if the provided tools can directly solve the task. If they can, use the appropriate tool to perform the feature engineering. The tool will automatically save the processed dataset.
+However, your responsibility is only to solve the assigned feature engineering subtask rather than the entire pipeline.
 
-If the tools cannot directly solve the task, you should use the `feature_engineering_tool_creation` tool to create a new tool to address the task based on the description provided.
+You have access to a set of tools that can help solve feature engineering tasks. When given a dataset path and a feature engineering task description, your first step is to determine whether the provided tools can directly solve the assigned subtask. If they can, use the appropriate tool to perform the feature engineering. The tool will automatically save the processed dataset.
 
-The created tool should strictly follow the format below:
+If the existing tools cannot directly solve the subtask, use the `feature_engineering_tool_creation` tool to create a new tool based on the provided task description.
+
+The created tool must strictly follow the format below:
 ```python
 def tool_name(parameters):
     # detail of the code
@@ -46,14 +38,19 @@ def tool_name(parameters):
 if __name__ == '__main__':
     parameters = {...}
     tool_name(parameters)
-```
+````
+
 """
 
-
 FEATURE_ENGINEERING_PROMPT = """
-You are given a dataset located at {dataset_file}. Your task is to process the dataset according to the following requirements:
+You are given a dataset located at {dataset_file}.
 
-# FEATURE ENGINEERING TASK #
+{global_task}
+
+Your primary objective is to solve the assigned feature engineering subtask below.
+
+# FEATURE ENGINEERING SUBTASK
+
 {task}
 
 After processing, save the processed dataset to {saved_dataset_file}.

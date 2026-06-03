@@ -44,9 +44,9 @@ class ModelAgent(BaseAgent):
         self.count = 0
         self.history = []
 
-    async def __call__(self, train_dataset_path, test_dataset_path, task, work_dir):
+    async def __call__(self, train_dataset_path, test_dataset_path, task, global_task, work_dir):
         self.count += 1
-        prompt = MODEL_DEVELOPMENT_PROMPT.format(train_dataset_path=train_dataset_path, test_dataset_path=test_dataset_path, task=task)
+        prompt = MODEL_DEVELOPMENT_PROMPT.format(train_dataset_path=train_dataset_path, test_dataset_path=test_dataset_path, global_task=global_task, task=task)
         messages = [{"role": "user", "content": prompt}]
         for i in range(self.max_steps):
             choice = await self.llm.generate(messages, tools=self.all_tools)

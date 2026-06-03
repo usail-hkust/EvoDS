@@ -45,13 +45,13 @@ run_main() {
 }
 
 
-start_llm "checkpoints/EvoDS-rl-8B" "evods-rl-8b" 1234 1 "nohup.log"
+start_llm "checkpoints/EvoDS" "EvoDS" 1234 1 "nohup.log"
 
 # Execute the Python script
-run_main "evods-rl-8b" "DABench" 4
-run_main "evods-rl-8b" "DACode" 4
-run_main "evods-rl-8b" "SAB" 4
-run_main "evods-rl-8b" "mledojo" 4
+run_main "EvoDS" "DABench" 4
+run_main "EvoDS" "DACode" 4
+run_main "EvoDS" "SAB" 4
+run_main "EvoDS" "mledojo" 4
 
 # Stop the first LLM deployment
 stop_llm $llm_pid

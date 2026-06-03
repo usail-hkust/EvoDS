@@ -10,11 +10,18 @@ warnings.filterwarnings("ignore")
 import os
 
 
-DATA_CLEARNER_SYS_PROMPT = """You are a data science expert specializing in data cleaning tasks. You have access to a set of tools that can help solve these tasks. When given a dataset path and a data cleaning task description, your first step is to check if the provided tools can directly solve the task. If they can, use the appropriate tool to perform the cleaning. The tool will automatically save the cleaned dataset.
+DATA_CLEARNER_SYS_PROMPT = """You are a data science expert specializing in data cleaning tasks. You are working as a sub-agent in a multi-agent system.
 
-If the tools cannot directly solve the task, you should use the `data_cleaning_tool_creation` tool to create a new tool to address the task based on the description provided.
+# GLOBAL CONTEXT #
+The global context contains the overall task objective. You should use this information to understand the broader goal and maintain consistency with the overall workflow.
 
-The created tool should strictly follow the format below:
+However, your responsibility is only to solve the assigned data cleaning subtask rather than the entire pipeline.
+
+You have access to a set of tools that can help solve data cleaning tasks. When given a dataset path and a data cleaning task description, your first step is to determine whether the provided tools can directly solve the assigned subtask. If they can, use the appropriate tool to perform the cleaning. The tool will automatically save the cleaned dataset.
+
+If the existing tools cannot directly solve the subtask, use the `data_cleaning_tool_creation` tool to create a new tool based on the provided task description.
+
+The created tool must strictly follow the format below:
 ```python
 def tool_name(parameters):
     # detail of the code
@@ -23,13 +30,17 @@ def tool_name(parameters):
 if __name__ == '__main__':
     parameters = {...}
     tool_name(parameters)
-```
+````
 """
 
 DATA_CLEANING_PROMPT = """
-You are given a dataset located at {dataset_file}. Your task is to clean the dataset according to the following requirements:
+You are given a dataset located at {dataset_file}.
 
-# DATA CLEANING TASK #
+{global_task}
+
+Your primary objective is to solve the assigned data cleaning subtask below.
+
+# DATA CLEANING SUBTASK #
 {task}
 
 After cleaning, save the cleaned dataset to {saved_dataset_file}.

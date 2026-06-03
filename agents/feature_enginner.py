@@ -45,10 +45,10 @@ class FeatureEnginner(BaseAgent):
         super().__init__("feature_enginner", self.system_prompt, llm_config)
         self.count = 0
 
-    async def __call__(self, dataset_file, task, work_dir):
+    async def __call__(self, dataset_file, task, global_task, work_dir):
         self.count += 1
         saved_dataset_file = ".".join(dataset_file.split(".")[:-1]) + f"_feature_engineered_{self.count}." + dataset_file.split(".")[-1]
-        prompt = FEATURE_ENGINEERING_PROMPT.format(dataset_file=dataset_file, task=task, saved_dataset_file=saved_dataset_file)
+        prompt = FEATURE_ENGINEERING_PROMPT.format(dataset_file=dataset_file, global_task=global_task, task=task, saved_dataset_file=saved_dataset_file)
         messages = [{"role": "user", "content": prompt}]
         for i in range(self.max_steps):
             choice = await self.llm.generate(messages, tools=self.all_tools)

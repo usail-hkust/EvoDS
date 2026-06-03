@@ -41,10 +41,10 @@ class DataCleaner(BaseAgent):
         self.count = 0
         self.history = []
 
-    async def __call__(self, dataset_file, task, work_dir):
+    async def __call__(self, dataset_file, task, global_task, work_dir):
         self.count += 1
         saved_dataset_file = ".".join(dataset_file.split(".")[:-1]) + f"_cleaned_{self.count}." + dataset_file.split(".")[-1]
-        prompt = DATA_CLEANING_PROMPT.format(dataset_file=dataset_file, task=task, saved_dataset_file=saved_dataset_file)
+        prompt = DATA_CLEANING_PROMPT.format(dataset_file=dataset_file, global_task=global_task, task=task, saved_dataset_file=saved_dataset_file)
         messages = [{"role": "user", "content": prompt}]
         for i in range(self.max_steps):
             choice = await self.llm.generate(messages, tools=self.all_tools)

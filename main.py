@@ -83,7 +83,7 @@ def parse_args():
     parser.add_argument(
         "--model",
         type=str,
-        default='evods-rl-8b',
+        default='EvoDS',
         help="Specifies the name of the model used for EvoDS.",
     )
     parser.add_argument(

@@ -42,9 +42,9 @@ class Visualizer(BaseAgent):
         self.count = 0
         self.history = []
 
-    async def __call__(self, dataset_file, task, saved_plot_file, work_dir):
+    async def __call__(self, dataset_file, task, saved_plot_file, global_task, work_dir):
         self.count += 1
-        prompt = VISUALIZATION_PROMPT.format(dataset_file=dataset_file, task=task, saved_plot_file=saved_plot_file)
+        prompt = VISUALIZATION_PROMPT.format(dataset_file=dataset_file, global_task=global_task, task=task, saved_plot_file=saved_plot_file)
         messages = [{"role": "user", "content": prompt}]
         for i in range(self.max_steps):
             choice = await self.llm.generate(messages, tools=self.all_tools)

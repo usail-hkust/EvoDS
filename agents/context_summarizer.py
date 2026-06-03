@@ -5,5 +5,5 @@ class ContextSummarize():
     def __init__(self):
         self.role = "context_summarize"
     
-    async def __call__(self, work_dir):
+    async def __call__(self):
         return CONTEXT_SUMMARIZE_PROMPT
